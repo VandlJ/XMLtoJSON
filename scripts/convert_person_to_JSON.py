@@ -1,9 +1,13 @@
-from convert.personConvert import parsePersonXML
+import sys
 import os
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from convert.personConvert import parsePersonXML
+
 # Set the path to the input and output folders
-input_folder = "../test_data/Person_Namen"
-output_folder = "../test_data/Person_Namen_JSON"
+input_folder = "../test_data/Namen"
+output_folder = "../test_data/Namen_JSON"
 
 # Iterate through the files in the input folder
 for file_name in os.listdir(input_folder):
@@ -13,6 +17,8 @@ for file_name in os.listdir(input_folder):
 
     modified_text = parsePersonXML(input_file_path).to_json()
     # Open the output file
+
+    #TO-DO Create folder
     with open(output_file_path, "w") as output_file:
         # Write the modified text to the output file
         output_file.write(modified_text)

@@ -1,5 +1,6 @@
 # Ignore the .idea directory
 .idea/
+test_data/
 
 # Python-related files
 __pycache__/

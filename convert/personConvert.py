@@ -1,4 +1,9 @@
+import sys
+import os
 from xml.dom import minidom
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from model.Person import Person
 
 
@@ -40,12 +45,18 @@ def getArtworkList(text):
 def parsePersonXML(filePath: str) -> Person:
 
     # doc = minidom.parse(filePath)
-    doc = minidom.parse("../test_data/Person_Namen/Alexandrin_Julius.xml")
+    doc = minidom.parse("../test_data/Namen/Alexandrin_Julius.xml")
 
     full_name = ""
     first_name = ""
     last_name = ""
-    file_name = filePath.split('\\')[1].rsplit('.', 1)[0]
+
+    print("File Path: ", filePath) 
+
+    # file_name = filePath.split('\\')[1].rsplit('.', 1)[0]
+
+    file_name = os.path.basename(filePath).rsplit('.', 1)[0]
+
     references_list = []
     artwork_list = []
     additional_info = []

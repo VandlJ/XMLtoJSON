@@ -1,11 +1,18 @@
-from convert.archiveLinkConvert import parseArchiveLinkXML
 import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from convert.archiveLinkConvert import parseArchiveLinkXML
 
 from model.ArchiveLink import ArchiveLink
 
 # Set the path to the input and output folders
 input_folder = "../test_data/Archiv"
 output_folder = "../test_data/Archiv_JSON/"
+
+# Create the output folder if it does not exist
+os.makedirs(output_folder, exist_ok=True)
 
 #input_file_path = "../test_data/Archiv/A_0_Archive.xml"
 #output_file_path = "../test_data/Archiv_Link_JSON/LinkStructure.json"

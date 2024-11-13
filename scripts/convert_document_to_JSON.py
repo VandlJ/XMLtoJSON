@@ -1,9 +1,17 @@
-from convert.artworkConvert import parseDocumentXML
 import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from convert.artworkConvert import parseDocumentXML
+
 
 # Set the path to the input and output folders
 input_folder = "../test_data/Regesten"  # not in gitlab (too large)
-output_folder = "../test_data/Regesten_JSON_test"
+output_folder = "../test_data/Regesten_JSON"
+
+# Create the output folder if it does not exist
+os.makedirs(output_folder, exist_ok=True)
 
 # Iterate through the files in the input folder
 for file_name in os.listdir(input_folder):

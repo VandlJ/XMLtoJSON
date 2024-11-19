@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 
 
-def getNamespace(tree : ET) -> str:
+def getNamespace(tree: ET) -> str:
     namespace = ""
 
     # Get second element -> suggested by OPEN AI O.o
@@ -10,7 +10,7 @@ def getNamespace(tree : ET) -> str:
         if element == tree.getroot():
             continue
         # Get the namespace of the element
-        namespace = element.tag[1:].split('}')[0]
+        namespace = element.tag[1:].split("}")[0]
         break
 
     return namespace

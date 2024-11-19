@@ -1,10 +1,9 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from convert.artworkConvert import parseDocumentXML
-
 
 # Set the path to the input and output folders
 input_folder = "../test_data/Regesten"  # not in gitlab (too large)
@@ -25,4 +24,8 @@ for file_name in os.listdir(input_folder):
         # Write the modified text to the output file
         output_file.write(modified_text)
 
-print("Transformation from XML in {0} to JSON {1} in is Done.".format(input_folder, output_folder))
+print(
+    "Transformation from XML in {0} to JSON {1} in is Done.".format(
+        input_folder, output_folder
+    )
+)

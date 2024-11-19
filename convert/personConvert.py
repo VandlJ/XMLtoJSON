@@ -1,15 +1,15 @@
-import sys
 import os
+import sys
 from xml.dom import minidom
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from model.Person import Person
 
 
 def getName(name):
-    if ',' in name:
-        names = name.split(',')
+    if "," in name:
+        names = name.split(",")
         last_name = names[0]
         first_name = names[1][1:]
     else:
@@ -21,13 +21,16 @@ def getName(name):
 def getReferencesList(element):
     reference_list = []
     for childNode in element.childNodes[1:]:
-        href = childNode.attributes["href"].childNodes[0].data.split('/')[2].rsplit('.', 1)[0]
+        href = (
+            childNode.attributes["href"]
+            .childNodes[0]
+            .data.split("/")[2]
+            .rsplit(".", 1)[0]
+        )
         title = childNode.attributes["title"].childNodes[0].data
         date = childNode.childNodes[0].data
 
-        reference_list.append({"title": title,
-                               "uri": href,
-                               "date": date})
+        reference_list.append({"title": title, "uri": href, "date": date})
     return reference_list
 
 
@@ -43,7 +46,6 @@ def getArtworkList(text):
 
 
 def parsePersonXML(filePath: str) -> Person:
-
     # doc = minidom.parse(filePath)
     doc = minidom.parse("../test_data/Namen/Alexandrin_Julius.xml")
 
@@ -51,11 +53,11 @@ def parsePersonXML(filePath: str) -> Person:
     first_name = ""
     last_name = ""
 
-    print("File Path: ", filePath) 
+    print("File Path: ", filePath)
 
     # file_name = filePath.split('\\')[1].rsplit('.', 1)[0]
 
-    file_name = os.path.basename(filePath).rsplit('.', 1)[0]
+    file_name = os.path.basename(filePath).rsplit(".", 1)[0]
 
     references_list = []
     artwork_list = []
@@ -90,8 +92,9 @@ def parsePersonXML(filePath: str) -> Person:
         artwork_list=artwork_list,
         additional_info=additional_info,
         file_name=file_name,
-        authority=None
-        )
+        authority=None,
+    )
+
 
 # def parsePersonXML(xmlString : str) -> Person:
 #

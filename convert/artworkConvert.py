@@ -1,5 +1,6 @@
-from xml.dom import minidom
 import re
+from xml.dom import minidom
+
 from model.Document import Document
 
 
@@ -34,7 +35,16 @@ def getText(element):
                         text = text + "<" + "li" + ">" + part + "</" + "li" + ">"
                 text = text + "<" + node.tagName + ">"
             else:
-                text = text + "<" + node.tagName + ">" + node.childNodes[0].data + "</" + node.tagName + ">"
+                text = (
+                    text
+                    + "<"
+                    + node.tagName
+                    + ">"
+                    + node.childNodes[0].data
+                    + "</"
+                    + node.tagName
+                    + ">"
+                )
 
     return text
 
@@ -46,7 +56,10 @@ def getArchive(element):
     for node in element.childNodes:
         if node.nodeName == "a":
             # Extract the archive code and name from the href attribute using a regular expression
-            match = re.match(r'\.\./Archiv/A_(\d+)_(.+?)\.xml', node.attributes["href"].childNodes[0].data)
+            match = re.match(
+                r"\.\./Archiv/A_(\d+)_(.+?)\.xml",
+                node.attributes["href"].childNodes[0].data,
+            )
             if match:
                 archive_name = node.childNodes[0].data
                 # Add the archive code and name to the dictionary
@@ -83,7 +96,6 @@ def getReferredIn(text):
 
 
 def parseDocumentXML(filePath):
-
     # doc = minidom.parse("../test_data/Regesten/A1570-00-00-00013.xml")
     doc = minidom.parse(filePath)
 
@@ -92,7 +104,7 @@ def parseDocumentXML(filePath):
     namespace = doc.childNodes[1].attributes["xmlns"].childNodes[0].data
 
     # split the text by the hyphen character
-    parts = uri.split('-')
+    parts = uri.split("-")
 
     # the date is the second and third parts, in the format 'YYYY/MM/DD'
     date = f"{parts[0][1:]}-{parts[1]}-{parts[2]}"
@@ -128,16 +140,16 @@ def parseDocumentXML(filePath):
                 referredIn.append(getReferredIn(element.data))
 
     return Document(
-            uri=uri,
-            publication_date=publication_date,
-            date=date,
-            index=index,
-            namespace=namespace,
-            title=title,
-            archives=archives,
-            referedIn=referredIn,
-            text=text,
-            names=names,
-            copyRight=copyRight,
-            metaData=metaData
-        )
+        uri=uri,
+        publication_date=publication_date,
+        date=date,
+        index=index,
+        namespace=namespace,
+        title=title,
+        archives=archives,
+        referedIn=referredIn,
+        text=text,
+        names=names,
+        copyRight=copyRight,
+        metaData=metaData,
+    )

@@ -37,6 +37,7 @@ class ArchiveLink:
         # Return the dictionary as a JSON string
         return json.dumps(obj_dict, cls=ArchiveLinkEncoder, indent=2)
 
+    # NOTE: This is not used anywhere, wtf?
     def set_next(self, next_link):
         # implement a method to set the 'next' link
         self.next = next_link

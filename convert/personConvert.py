@@ -21,6 +21,7 @@ def getName(name):
 def getReferencesList(element):
     reference_list = []
     for childNode in element.childNodes[1:]:
+        # The fuck
         href = (
             childNode.attributes["href"]
             .childNodes[0]
@@ -47,6 +48,7 @@ def getArtworkList(text):
 
 def parsePersonXML(filePath: str) -> Person:
     # doc = minidom.parse(filePath)
+    # FIXME: Hardcoded stuff, yay!
     doc = minidom.parse("../test_data/Namen/Alexandrin_Julius.xml")
 
     full_name = ""
@@ -96,6 +98,8 @@ def parsePersonXML(filePath: str) -> Person:
     )
 
 
+# FIXME: Get rid of this shit
+#
 # def parsePersonXML(xmlString : str) -> Person:
 #
 #     # parse the XML file

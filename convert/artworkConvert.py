@@ -5,15 +5,25 @@ from model.Document import Document
 
 
 def getNames(element):
+    """Extract names and their aliases from the namindex element."""
     names = []
 
     for node in element.childNodes:
         if node.nodeName == "a":
             tmp = {}
-            name = node.childNodes[0].data
-            name_key_string = node.attributes["href"].childNodes[0].data
-            name_key = name_key_string[9:].split(".xml")[0]
+            name = node.firstChild.data.strip()  # Get the display name
+            name_key_string = node.getAttribute("href")
+            name_key = name_key_string.split("/")[-1].rsplit(".xml", 1)[0]
+
+            # Extract alias from the onmouseover attribute
+            onmouseover = node.getAttribute("onmouseover")
+            alias_match = re.search(r"highlightWords\(event, '([^']+)'\)", onmouseover)
+            alias = alias_match.group(1) if alias_match else None
+
+            # Populate the dictionary
             tmp[name_key] = name
+            if alias:
+                tmp["alias"] = alias
             names.append(tmp)
 
     return names

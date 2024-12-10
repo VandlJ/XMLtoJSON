@@ -1,15 +1,14 @@
 # XML to JSON Converter
 
 ## Table of Contents
-- [XML to JSON Converter](#xml-to-json-converter)
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-  - [Features](#features)
-  - [Repository Structure](#repository-structure)
-  - [Usage](#usage)
-  - [Setup Instructions](#setup-instructions)
-    - [Step 1: CLone the Repository](#step-1-clone-the-repository)
-    - [Step 2: Run the Conversion](#step-2-run-the-conversion)
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Features](#features)
+- [Repository Structure](#repository-structure)
+- [Usage](#usage)
+- [Setup Instructions](#setup-instructions)
+  - [Step 1: CLone the Repository](#step-1-clone-the-repository)
+  - [Step 2: Run the Conversion](#step-2-run-the-conversion)
 
 ---
 

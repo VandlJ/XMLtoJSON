@@ -61,7 +61,7 @@ You can customize the conversion process by specifying options like the type of 
 
 ## Setup Instructions
 
-### Step 1: CLone the Repository
+### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/VandlJ.git

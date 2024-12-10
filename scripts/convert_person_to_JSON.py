@@ -1,5 +1,5 @@
-import os
 import sys
+import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -32,3 +32,9 @@ for file_name in os.listdir(input_folder):
             print(f"Error writing JSON for {file_name}: {e}")
     else:
         print(f"Failed to parse {file_name}.")
+
+print(
+    "Transformation from XML in {0} to JSON {1} in is Done.".format(
+        input_folder, output_folder
+    )
+)

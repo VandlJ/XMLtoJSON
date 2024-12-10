@@ -30,33 +30,33 @@ def getNames(element):
 
 
 def getText(element):
-    text = ""
+    """Extract text in two formats: display text and processable text."""
+    display_text = ""
+    processable_text = ""
 
     for node in element.childNodes:
         if len(node.childNodes) == 0:
             if node.nodeName == "#text":
-                text = text + node.data
+                display_text += node.data
+                processable_text += " " + node.data.strip()  # Normalize for processing
         else:
-            if node.tagName == "ol" or node.tagName == "ul":
+            if node.tagName in ["ol", "ul"]:
                 parts = node.childNodes[0].data.split("\n")
-                text = text + "<" + node.tagName + ">"
+                display_text += f"<{node.tagName}>"
                 for part in parts:
-                    if part != "":
-                        text = text + "<" + "li" + ">" + part + "</" + "li" + ">"
-                text = text + "<" + node.tagName + ">"
+                    if part.strip():
+                        display_text += f"<li>{part}</li>"
+                        processable_text += " " + part.strip()  # Add plain list items
+                display_text += f"</{node.tagName}>"
             else:
-                text = (
-                    text
-                    + "<"
-                    + node.tagName
-                    + ">"
-                    + node.childNodes[0].data
-                    + "</"
-                    + node.tagName
-                    + ">"
-                )
+                content = node.childNodes[0].data.strip()
+                display_text += f"<{node.tagName}>{content}</{node.tagName}>"
+                processable_text += " " + content  # Add plain content
 
-    return text
+    # Final cleanup for processable text
+    processable_text = re.sub(r"\s+", " ", processable_text).strip()  # Remove extra spaces
+
+    return display_text, processable_text
 
 
 def getArchive(element):
@@ -124,7 +124,8 @@ def parseDocumentXML(filePath):
 
     title = ""
     names = {}
-    text = ""
+    display_text = ""
+    processable_text = ""
     archives = {}
     archives["None"] = "None"
     metaData = []
@@ -140,7 +141,8 @@ def parseDocumentXML(filePath):
             if element.attributes["class"].nodeValue == "namindex":
                 names = getNames(element)
             if element.attributes["class"].nodeValue == "zitat":
-                text = getText(element)
+                # Extract both versions of the text
+                display_text, processable_text = getText(element)
             if element.attributes["class"].nodeValue == "archiv":
                 archives = getArchive(element)
         if element.nodeName == "#text":
@@ -158,7 +160,7 @@ def parseDocumentXML(filePath):
         title=title,
         archives=archives,
         referedIn=referredIn,
-        text=text,
+        text={"display": display_text, "processable": processable_text},
         names=names,
         copyRight=copyRight,
         metaData=metaData,

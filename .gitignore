@@ -87,3 +87,6 @@ coverage/
 *.pid.lock
 *.stackdump
 *.dump
+
+# Ruff check files
+.ruff_cache

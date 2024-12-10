@@ -2,7 +2,6 @@ import os
 from xml.dom import minidom
 from model.Person import Person
 
-
 def get_name(name):
     """Extract first and last names from a name string."""
     if "," in name:
@@ -13,7 +12,6 @@ def get_name(name):
         last_name = name.strip()
         first_name = ""
     return last_name, first_name
-
 
 def get_references_list(element):
     """Parse reference list from the XML."""
@@ -27,7 +25,6 @@ def get_references_list(element):
         except Exception as e:
             print(f"Error processing reference: {e}")
     return references
-
 
 def parse_person_xml(file_path: str, data_folder: str) -> Person:
     """Parse XML and return a Person object."""

@@ -2,7 +2,6 @@ import re
 from xml.dom import minidom
 from model.Document import Document
 
-
 def getNames(element):
     """Extract names and their aliases from the namindex element."""
     names = []
@@ -26,7 +25,6 @@ def getNames(element):
             names.append(tmp)
 
     return names
-
 
 def getText(element):
     """Extract text in two formats: display text and processable text."""
@@ -57,7 +55,6 @@ def getText(element):
 
     return display_text, processable_text
 
-
 def getArchive(element):
     """Parse archives from the XML."""
     archives = {}
@@ -79,7 +76,6 @@ def getArchive(element):
 
     return archives
 
-
 def getMetadataOfText(text):
     """Parse metadata from text."""
     metaD = []
@@ -90,7 +86,6 @@ def getMetadataOfText(text):
         metaD.append(part)
 
     return metaD
-
 
 def getReferredIn(text):
     """Parse references in the text."""
@@ -106,7 +101,6 @@ def getReferredIn(text):
 
     return reference
 
-
 def parseDocumentXML(filePath, data_folder):
     """Parse the XML and extract data."""
     doc = minidom.parse(filePath)
@@ -115,13 +109,13 @@ def parseDocumentXML(filePath, data_folder):
     publication_date = doc.childNodes[1].attributes["v"].childNodes[0].data
     namespace = doc.childNodes[1].attributes["xmlns"].childNodes[0].data
 
-    # split the text by the hyphen character
+    # Split the text by the hyphen character
     parts = uri.split("-")
 
-    # the date is the second and third parts, in the format 'YYYY/MM/DD'
+    # The date is the second and third parts, in the format 'YYYY/MM/DD'
     date = f"{parts[0][1:]}-{parts[1]}-{parts[2]}"
 
-    # the identification number is the fourth part
+    # The identification number is the fourth part
     index = parts[-1]
 
     title = ""

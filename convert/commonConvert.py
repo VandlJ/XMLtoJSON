@@ -1,12 +1,12 @@
 import xml.etree.ElementTree as ET
 
-
-def getNamespace(tree: ET) -> str:
+def getNamespace(tree: ET.ElementTree) -> str:
+    """Extract the namespace from an XML tree."""
     namespace = ""
 
-    # Get second element -> suggested by OPEN AI O.o
+    # Iterate over elements in the tree
     for element in tree.iter():
-        # Skip the first element
+        # Skip the root element
         if element == tree.getroot():
             continue
         # Get the namespace of the element

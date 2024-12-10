@@ -30,7 +30,6 @@ The solution includes:
 
 ```bash
 convert/
-  __pycache__/               # Cached Python files
   sample/                    # Sample XML files for conversion testing
   archiveLinkConvert.py      # Handles conversion of archive link XMLs
   artworkConvert.py          # Handles artwork XML data
@@ -41,7 +40,6 @@ docs/
   Analyza_SP.md              # Analysis related documentation
   documentaria_rudolphina.md # Project-specific documentation
 model/
-  __pycache__/               # Cached Python files
   ArchiveLink.py             # Data model for archive links
   Document.py                # Data model for documents
   Person.py                  # Data model for person records

@@ -23,15 +23,16 @@ def convert_files(convert_function, input_folder, output_folder, data_folder):
             # Call the specific parse function
             parsed_data = convert_function(input_file_path, data_folder)
             if parsed_data:
+                # Write the parsed data to a JSON file
                 with open(output_file_path, "w", encoding="utf-8") as output_file:
                     output_file.write(parsed_data.to_json())
             else:
                 print(f"Failed to parse {file_name}.")
         except Exception as e:
+            # Print any errors that occur during processing
             print(f"Error processing {file_name}: {e}")
 
     print(f"Conversion complete from {input_folder} to {output_folder}.")
-
 
 def main():
     # Set up argument parsing
@@ -72,11 +73,11 @@ def main():
             os.path.join(args.input_path, "Archiv"),
         )
 
-    if args.type in ["regesten", "all"]:
+    if args.type in ["registers", "all"]:
         print("Converting Regesten (Document) XML files...")
         convert_files(
             parseDocumentXML,
-            os.path.join(args.input_path, type_to_subfolder["regesten"]),
+            os.path.join(args.input_path, type_to_subfolder["registers"]),
             os.path.join(args.output_path, "Regesten_JSON"),
             os.path.join(args.input_path, "Regesten"),
         )
@@ -89,7 +90,6 @@ def main():
             os.path.join(args.output_path, "Namen_JSON"),
             os.path.join(args.input_path, "Names"),
         )
-
 
 if __name__ == "__main__":
     main()

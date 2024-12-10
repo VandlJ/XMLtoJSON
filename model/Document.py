@@ -1,6 +1,5 @@
 import json
-from typing import Dict
-
+from typing import Dict, List
 
 class Document:
     collection_name = "Document"
@@ -14,12 +13,28 @@ class Document:
         namespace: str,
         title: str,
         archives: Dict[str, str],
-        referedIn: [str],
+        referedIn: List[str],
         text: str,
         names: Dict[str, str],
-        copyRight: [str],
-        metaData: [str],
+        copyRight: List[str],
+        metaData: List[str],
     ):
+        """
+        Initialize a Document object.
+
+        :param uri: The URI of the document.
+        :param publication_date: The publication date of the document.
+        :param date: The date of the document.
+        :param index: The index of the document.
+        :param namespace: The XML namespace.
+        :param title: The title of the document.
+        :param archives: A dictionary of archives related to the document.
+        :param referedIn: A list of references in which the document is referred.
+        :param text: The text content of the document.
+        :param names: A dictionary of names related to the document.
+        :param copyRight: A list of copyright information.
+        :param metaData: A list of metadata related to the document.
+        """
         self.uri = uri
         self.publication_date = publication_date
         self.date = date
@@ -35,7 +50,7 @@ class Document:
 
     @classmethod
     def from_dict(cls, doc: Dict):
-        # Create a new Document object from a dictionary
+        """Create a new Document object from a dictionary."""
         return cls(
             doc["uri"],
             doc["publication_date"],
@@ -51,8 +66,8 @@ class Document:
             doc["metaData"],
         )
 
-    def to_dict(self):
-        # Convert the Document object to a dictionary
+    def to_dict(self) -> Dict:
+        """Convert the Document object to a dictionary."""
         return {
             "uri": self.uri,
             "publication_date": self.publication_date,
@@ -68,9 +83,6 @@ class Document:
             "metaData": self.metaData,
         }
 
-    def to_json(self):
-        # Convert the object to a dictionary
-        obj_dict = self.__dict__
-
-        # Return the dictionary as a JSON string
-        return json.dumps(obj_dict)
+    def to_json(self) -> str:
+        """Convert the object to a JSON string."""
+        return json.dumps(self.to_dict(), indent=2)

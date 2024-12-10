@@ -53,12 +53,15 @@ scripts/
 
 ## Usage
 
-To use this tool, simply run the `main_convert.py` script, which will process the XML files in the specified directories and output the converted JSON files.
+To use this tool, simply run the `main_convert.py` script. This will process the XML files in the specified directories and output the converted JSON files.
+
+By default, the script looks for XML files in the `convert/sample/` directory, converts them, and saves the resulting JSON files in the output directory.
+
 ```bash
-python scripts/main_convert.py
+python3 scripts/main_convert.py
 ```
 
-This script will automatically find the XML files in the `convert/sample/` directory, convert them, and save the resulting JSON files in the output directory.
+You can customize the conversion process by specifying options like the type of conversion and input/output paths.
 
 ## Setup Instructions
 

@@ -30,7 +30,6 @@ The solution includes:
 
 ```bash
 convert/
-  sample/                    # Sample XML files for conversion testing
   archiveLinkConvert.py      # Handles conversion of archive link XMLs
   artworkConvert.py          # Handles artwork XML data
   commonConvert.py           # Contains common conversion utilities

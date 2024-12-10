@@ -1,53 +1,90 @@
-# XMLtoJSON - Documentaria Rudolphina
+# XML to JSON Converter
 
-**Documentaria Rudolphina** is a project focused on managing and analyzing historical records stored in **XML** files. The goal is to provide digital access to historical documents through an archive that enables efficient searching, navigation, and display of archival records.
+## Table of Contents
+- [XML to JSON Converter](#xml-to-json-converter)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Features](#features)
+  - [Repository Structure](#repository-structure)
+  - [Usage](#usage)
+  - [Setup Instructions](#setup-instructions)
+    - [Step 1: CLone the Repository](#step-1-clone-the-repository)
+    - [Step 2: Run the Conversion](#step-2-run-the-conversion)
 
-## Contents
+---
 
-- [XMLtoJSON - Documentaria Rudolphina](#xmltojson---documentaria-rudolphina)
-  - [Contents](#contents)
-  - [Project Overview](#project-overview)
-  - [Project Structure](#project-structure)
-  - [XML to JSON Transformation](#xml-to-json-transformation)
-  - [Application Design](#application-design)
-  - [Future Directions](#future-directions)
+## Overview
+This project provides a set of scripts and tools for converting XML files into JSON format. It is designed to work with different XML data sources and is fully customizable, supporting multiple conversion modules. The project is divided into separate Python modules for handling different kinds of data, including documents, persons, and archives.
 
-## Project Overview
+The solution includes:
+- Various XML parsing methods for extracting data from different types of XML files.
+- Tools to handle specific document types like archives, artwork, and persons.
+- A flexible structure for easy conversion and integration with other systems.
 
-The goal of this project is to create an archive application with features for full-text search and record browsing based on categories such as location, names, and timeframes. Each archival document should have a unique URL for citation purposes, and it is necessary to track changes in the data for accountability. Additionally, the archive will integrate with an authority database, allowing prioritization and standardization of results.
+## Features
+- **Custom Conversion Scripts**: Designed for different XML formats, including documents, persons, and archive links.
+- **Flexible Data Handling**: The ability to handle text, metadata, and specific attributes such as aliases and references.
+- **Modular Structure**: Each XML type is handled by separate scripts, making it easy to extend or modify.
 
-## Project Structure
+## Repository Structure
 
-The project contains four primary XML directories:
+```bash
+convert/
+  __pycache__/               # Cached Python files
+  sample/                    # Sample XML files for conversion testing
+  archiveLinkConvert.py      # Handles conversion of archive link XMLs
+  artworkConvert.py          # Handles artwork XML data
+  commonConvert.py           # Contains common conversion utilities
+  personConvert.py           # Handles conversion of person-related XMLs
+docs/
+  pictures/                  # Picture documentation related to the project
+  Analyza_SP.md              # Analysis related documentation
+  documentaria_rudolphina.md # Project-specific documentation
+model/
+  __pycache__/               # Cached Python files
+  ArchiveLink.py             # Data model for archive links
+  Document.py                # Data model for documents
+  Person.py                  # Data model for person records
+scripts/
+  main_convert.py            # Main script to execute conversion
+  .gitignore                 # Git ignore configuration
+  README.md                  # This documentation file
+```
 
-- **Archive**: A tree of locations representing the hierarchical structure of the archive with nine levels of nesting. Each record includes references to document transcriptions stored in the *Regesten* directory.
-- **Indices**: Alphabetized lists of people that link to *Namen*, which provides further information on individuals. The detail view for each person includes links to specific record transcriptions in *Regesten*.
-- **Namen**: Information on historical figures, including details like birth and death dates and a list of works in which they are mentioned.
-- **Regesten**: Individual transcriptions of historical texts accessible through links from other sections of the archive.
+## Usage
 
-All XML files are transformed into **HTML** using XSLT stylesheets, making them easier to view on web pages.
+To use this tool, simply run the `main_convert.py` script, which will process the XML files in the specified directories and output the converted JSON files.
+```bash
+python scripts/main_convert.py
+```
 
-## XML to JSON Transformation
+This script will automatically find the XML files in the `convert/sample/` directory, convert them, and save the resulting JSON files in the output directory.
 
-To optimize data handling, a transformation of XML files to **JSON** format was proposed, with storage in **MongoDB**. The project is organized into three main JSON collections:
+## Setup Instructions
 
-1. **Person**: Contains data on individuals, including names and supplementary information like birth dates and work listings.
-2. **Artwork**: Represents historical documents (originally from *Regesten*) with metadata such as title, document text, and archive references.
-3. **ArchiveLinks**: Preserves the hierarchical archive structure, allowing clear display and navigation within the archive.
+### Step 1: CLone the Repository
 
-## Application Design
+```bash
+git clone https://github.com/VandlJ.git
+cd XLMtoJSON
+```
 
-Based on analysis, two design options were proposed:
+### Step 2: Run the Conversion
 
-1. **Preserving the existing structure**: Restyling the current web application with added search functionality.
-2. **Building a new system**: Using a modern three-layer architecture with frontend-backend-database, where the front end leverages libraries such as **React** and **SemanticUI**.
+To begin the conversion, use the main conversion script. For example, to convert all XML files:
+```bash
+python3 scripts/main_convert.py --type all --input-path ../test_data --output-path ../test_data/output
+```
 
-User interface designs were created in Figma, focusing on intuitive navigation and fast search within the archive.
+The `--type` flag allows you to specify the type of conversion you want to perform:
+- `archive` – Convert archive-related data.
+- `registers` – Convert register-related data.
+- `names` – Convert name-related data.
+- `all` – Convert all types of data (default for full conversion).
+- 
+You can also check out all available options and get detailed information by running:
+```bash
+python3 scripts/main_convert.py --help
+```
 
-## Future Directions
-
-- Integrate APIs to connect with additional authority databases.
-- Optimize data structures for faster search and retrieval.
-- Add support for multiple languages and encodings, including non-ASCII characters for accurate representation of historical texts.
-
-This project aims to expand further with new features and optimizations, making historical data more accessible and manageable.
+This command will start processing the XML files in the specified `--input-path` directory and output the results to the `--output-path` directory.

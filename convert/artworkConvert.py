@@ -1,6 +1,5 @@
 import re
 from xml.dom import minidom
-
 from model.Document import Document
 
 
@@ -60,6 +59,7 @@ def getText(element):
 
 
 def getArchive(element):
+    """Parse archives from the XML."""
     archives = {}
 
     # Iterate over the a elements
@@ -81,6 +81,7 @@ def getArchive(element):
 
 
 def getMetadataOfText(text):
+    """Parse metadata from text."""
     metaD = []
     parts = text.split("\n")
     for part in parts:
@@ -92,6 +93,7 @@ def getMetadataOfText(text):
 
 
 def getReferredIn(text):
+    """Parse references in the text."""
     reference = ""
     for part in text.split("\n"):
         if part == "":
@@ -105,8 +107,8 @@ def getReferredIn(text):
     return reference
 
 
-def parseDocumentXML(filePath):
-    # doc = minidom.parse("../test_data/Regesten/A1570-00-00-00013.xml")
+def parseDocumentXML(filePath, data_folder):
+    """Parse the XML and extract data."""
     doc = minidom.parse(filePath)
 
     uri = doc.childNodes[1].attributes["uri"].childNodes[0].data

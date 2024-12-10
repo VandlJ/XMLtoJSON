@@ -29,7 +29,7 @@ def get_references_list(element):
     return references
 
 
-def parse_person_xml(file_path: str) -> Person:
+def parse_person_xml(file_path: str, data_folder: str) -> Person:
     """Parse XML and return a Person object."""
     try:
         doc = minidom.parse(file_path)

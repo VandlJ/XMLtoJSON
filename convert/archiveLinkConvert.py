@@ -7,21 +7,22 @@ namespace = {
     "dr": "http://documenta.rudolphina.org/",
     "xhtml": "http://www.w3.org/1999/xhtml",
 }
-data_folder = "../test_data/Archiv/"
 
 
 def file_exists(file_path):
+    """Check if a file exists and is a valid file."""
     return os.path.exists(file_path) and os.path.isfile(file_path)
 
 
 def parse_xml(xml_file):
+    """Parse an XML file and return its root element."""
     tree = ET.parse(xml_file)
     root = tree.getroot()
-
     return root
 
 
-def convert_to_json(xml_root, processed_links):
+def convert_to_json(xml_root, processed_links, data_folder):
+    """Convert an XML root element to JSON, handling sublinks."""
     link_to = xml_root.get("uri")
 
     if link_to in processed_links:
@@ -32,9 +33,7 @@ def convert_to_json(xml_root, processed_links):
     ul_elements = xml_root.findall(".//xhtml:ul", namespaces=namespace)[0].findall(
         ".//xhtml:a", namespaces=namespace
     )
-    cnt = len(ul_elements)
-    # hasSublink je nastaveno dle toho, zda daný subjekt má v XML sublinky - né dle toho, zda ty soubory existují
-    has_sublink = True if cnt > 0 else False
+    has_sublink = len(ul_elements) > 0
 
     json_data = {
         "name": xml_root.find(".//xhtml:title", namespaces=namespace).text,
@@ -52,57 +51,31 @@ def convert_to_json(xml_root, processed_links):
             base_name = os.path.basename(link_to_res)
             link, _ = os.path.splitext(base_name)
 
-            xml_file = link
-            if "test_data" not in xml_file:
-                xml_file = f"{data_folder}{xml_file}.xml"
+            xml_file = os.path.join(data_folder, f"{link}.xml")
             if file_exists(xml_file):
-                sublink_data = convert_to_json(parse_xml(xml_file), processed_links)
+                sublink_data = convert_to_json(parse_xml(xml_file), processed_links, data_folder)
 
                 if sublink_data:
                     subs.append(sublink_data)
 
-    al = ArchiveLink(
+    return ArchiveLink(
         json_data["name"], json_data["hasSublink"], json_data["linkTo"], subs
     )
 
-    return al
-
 
 def set_next_links(archive_links):
+    """Set the `next_link` attribute for sequential sublinks."""
     for i in range(len(archive_links[0].sublinks) - 1):
         archive_links[0].sublinks[i].next_link = archive_links[0].sublinks[i + 1].linkTo
     return archive_links[0]
 
 
-def parseArchiveLinkXML(in_file):
+def parseArchiveLinkXML(in_file, data_folder):
+    """Parse a single XML file and convert it to a JSON-compatible object."""
     archive_links = []
     processed_links = set()
     root = parse_xml(in_file)
-    data = convert_to_json(root, processed_links)
+    data = convert_to_json(root, processed_links, data_folder)
     archive_links.append(data)
 
-    ret = set_next_links(archive_links)
-
-    return ret
-
-
-if __name__ == "__main__":
-    ## Use this for converting Archives to JSON
-    input_directory = "../test_data/Archiv/"
-    output_directory = "../test_data/Archiv_JSON/"  # Výstupní soubory budou uloženy do aktuálního adresáře
-
-    # Získání seznamu souborů v adresáři
-    files = os.listdir(input_directory)
-
-    # Procházení každého souboru v adresáři
-    for file_name in files:
-        xml_file_path = os.path.join(input_directory, file_name)
-        name = xml_file_path.rsplit("/", 1)[-1]
-        name = name.rstrip(".xml")
-        name = output_directory + name
-        print(xml_file_path)
-        print(name)
-        print("")
-        data3 = parseArchiveLinkXML(xml_file_path)
-        with open(name, "w") as output_file2:
-            output_file2.write(data3.to_json())
+    return set_next_links(archive_links)

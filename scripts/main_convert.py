@@ -21,6 +21,7 @@ def convert_files(convert_function, input_folder, output_folder, data_folder):
 
         try:
             # Call the specific parse function
+            # FIXME: This could be multithreaded and waaay faster. This will improve performance drastically when querying the GETTY endpoint.
             parsed_data = convert_function(input_file_path, data_folder)
             if parsed_data:
                 # Write the parsed data to a JSON file
@@ -53,6 +54,9 @@ def main():
         required=True,
         help="Path to the output folder for JSON files.",
     )
+
+    # TODO: Add a flag that specifies whether the program should query for more accurate info at the GETTY dataset.
+    #       The conversion is damn fucking slow because of the load of queries we make to the API endpoint.
 
     args = parser.parse_args()
 

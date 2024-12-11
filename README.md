@@ -49,7 +49,15 @@ scripts/
 
 ## Usage
 
-To use this tool, simply run the `main_convert.py` script. This will process the XML files in the specified directories and output the converted JSON files.
+To use this tool, you'll need Python and pip installed.
+
+Then, run the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
+This will install necessary libraries to run the script. Then simply run the `main_convert.py` script. This will process the XML files in the specified directories and output the converted JSON files.
 
 By default, the script looks for XML files in the `convert/sample/` directory, converts them, and saves the resulting JSON files in the output directory.
 

@@ -1,14 +1,16 @@
 # XML to JSON Converter
 
 ## Table of Contents
-- [Table of Contents](#table-of-contents)
-- [Overview](#overview)
-- [Features](#features)
-- [Repository Structure](#repository-structure)
-- [Usage](#usage)
-- [Setup Instructions](#setup-instructions)
-  - [Step 1: Clone the Repository](#step-1-clone-the-repository)
-  - [Step 2: Run the Conversion](#step-2-run-the-conversion)
+- [XML to JSON Converter](#xml-to-json-converter)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Features](#features)
+  - [Repository Structure](#repository-structure)
+  - [Usage](#usage)
+    - [Input Data Folder Structure](#input-data-folder-structure)
+  - [Setup Instructions](#setup-instructions)
+    - [Step 1: Clone the Repository](#step-1-clone-the-repository)
+    - [Step 2: Run the Conversion](#step-2-run-the-conversion)
 
 ---
 
@@ -57,15 +59,48 @@ Then, run the following command:
 pip install -r requirements.txt
 ```
 
-This will install necessary libraries to run the script. Then simply run the `main_convert.py` script. This will process the XML files in the specified directories and output the converted JSON files.
+This will install necessary libraries to run the script. Then simply run the `main_convert.py` script with the appropriate options. Here are the main commands to run the program from the `XMLtoJSON` directory:
 
-By default, the script looks for XML files in the `convert/sample/` directory, converts them, and saves the resulting JSON files in the output directory.
+- Display help information:
+  ```bash
+  python3 scripts/main_convert.py --help
+  ```
+  or
+  ```bash
+  python3 scripts/main_convert.py --h
+  ```
+
+- Convert all types of XML files:
+  ```bash
+  python3 scripts/main_convert.py --type all --input_path "path_for_input_data" --output_path "path_for_output_data"
+  ```
+
+- Convert name-related XML files:
+  ```bash
+  python3 scripts/main_convert.py --type names --input_path "path_for_input_data" --output_path "path_for_output_data"
+  ```
+
+- Convert register-related XML files:
+  ```bash
+  python3 scripts/main_convert.py --type registers --input_path "path_for_input_data" --output_path "path_for_output_data"
+  ```
+
+- Convert archive-related XML files:
+  ```bash
+  python3 scripts/main_convert.py --type archive --input_path "path_for_input_data" --output_path "path_for_output_data"
+  ```
+
+### Input Data Folder Structure
+
+The input data folder should be structured as follows:
 
 ```bash
-python3 scripts/main_convert.py
+input_data/
+  Archiv/                    # Archive-related XML files
+  Regesten/                  # Register-related XML files
+  Namen/                     # Name-related XML files
+  Indicies/                  # Index-related XML files 
 ```
-
-You can customize the conversion process by specifying options like the type of conversion and input/output paths.
 
 ## Setup Instructions
 
@@ -73,25 +108,19 @@ You can customize the conversion process by specifying options like the type of 
 
 ```bash
 git clone https://github.com/VandlJ.git
-cd XLMtoJSON
+cd XMLtoJSON
 ```
 
 ### Step 2: Run the Conversion
 
 To begin the conversion, use the main conversion script. For example, to convert all XML files:
 ```bash
-python3 scripts/main_convert.py --type all --input-path ../test_data --output-path ../test_data/output
+python3 scripts/main_convert.py --type all --input_path "../test_data" --output_path "../test_data/output"
 ```
 
-The `--type` flag allows you to specify the type of conversion you want to perform:
-- `archive` – Convert archive-related data.
-- `registers` – Convert register-related data.
-- `names` – Convert name-related data.
-- `all` – Convert all types of data (default for full conversion).
-- 
 You can also check out all available options and get detailed information by running:
 ```bash
 python3 scripts/main_convert.py --help
 ```
 
-This command will start processing the XML files in the specified `--input-path` directory and output the results to the `--output-path` directory.
+This command will start processing the XML files in the specified `--input_path` directory and output the results to the `--output_path` directory.

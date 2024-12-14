@@ -1,7 +1,6 @@
 import os
 from xml.dom import minidom
 from model.Person import Person
-import aiohttp
 import asyncio
 from aiocache import Cache
 from aiocache.decorators import cached

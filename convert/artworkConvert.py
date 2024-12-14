@@ -2,7 +2,7 @@ import re
 from xml.dom import minidom
 from model.Document import Document
 
-def getNames(element):
+async def getNames(element):
     """Extract names and their aliases from the namindex element."""
     names = []
 
@@ -26,7 +26,7 @@ def getNames(element):
 
     return names
 
-def getText(element):
+async def getText(element):
     """Extract text in two formats: display text and processable text."""
     display_text = ""
     processable_text = ""
@@ -55,7 +55,7 @@ def getText(element):
 
     return display_text, processable_text
 
-def getArchive(element):
+async def getArchive(element):
     """Parse archives from the XML."""
     archives = {}
 
@@ -76,7 +76,7 @@ def getArchive(element):
 
     return archives
 
-def getMetadataOfText(text):
+async def getMetadataOfText(text):
     """Parse metadata from text."""
     metaD = []
     parts = text.split("\n")
@@ -87,7 +87,7 @@ def getMetadataOfText(text):
 
     return metaD
 
-def getReferredIn(text):
+async def getReferredIn(text):
     """Parse references in the text."""
     reference = ""
     for part in text.split("\n"):
@@ -101,7 +101,7 @@ def getReferredIn(text):
 
     return reference
 
-def parseDocumentXML(filePath, data_folder):
+async def parseDocumentXML(filePath, data_folder):
     """Parse the XML and extract data."""
     doc = minidom.parse(filePath)
 
@@ -119,7 +119,7 @@ def parseDocumentXML(filePath, data_folder):
     index = parts[-1]
 
     title = ""
-    names = {}
+    names = []
     display_text = ""
     processable_text = ""
     archives = {}
@@ -135,17 +135,17 @@ def parseDocumentXML(filePath, data_folder):
             title = element.childNodes[0].data
         if element.nodeName == "div":
             if element.attributes["class"].nodeValue == "namindex":
-                names = getNames(element)
+                names = await getNames(element)
             if element.attributes["class"].nodeValue == "zitat":
                 # Extract both versions of the text
-                display_text, processable_text = getText(element)
+                display_text, processable_text = await getText(element)
             if element.attributes["class"].nodeValue == "archiv":
-                archives = getArchive(element)
+                archives = await getArchive(element)
         if element.nodeName == "#text":
             if element.previousSibling.nodeName == "title":
-                metaData = getMetadataOfText(element.data)
+                metaData = await getMetadataOfText(element.data)
             if element.previousSibling.nodeName == "div":
-                referredIn.append(getReferredIn(element.data))
+                referredIn.append(await getReferredIn(element.data))
 
     return Document(
         uri=uri,
@@ -155,9 +155,9 @@ def parseDocumentXML(filePath, data_folder):
         namespace=namespace,
         title=title,
         archives=archives,
-        referedIn=referredIn,
         text={"display": display_text, "processable": processable_text},
         names=names,
         copyRight=copyRight,
         metaData=metaData,
+        referedIn=referredIn,
     )

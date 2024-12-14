@@ -1,16 +1,30 @@
-import sys
 import os
+import sys
 import argparse
+import asyncio
 
-# Import the conversion functions
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from convert.archiveLinkConvert import parseArchiveLinkXML
 from convert.artworkConvert import parseDocumentXML
 from convert.personConvert import parse_person_xml
 
-def convert_files(convert_function, input_folder, output_folder, data_folder):
-    """Generic function to convert XML files to JSON."""
+async def process_file(convert_function, input_file_path, output_file_path, data_folder, semaphore):
+    async with semaphore:
+        try:
+            parsed_data = await convert_function(input_file_path, data_folder)
+            if parsed_data:
+                with open(output_file_path, "w", encoding="utf-8") as output_file:
+                    output_file.write(parsed_data.to_json())
+            else:
+                print(f"Failed to parse {input_file_path}.")
+        except Exception as e:
+            print(f"Error processing {input_file_path}: {e}")
+
+async def convert_files_async(convert_function, input_folder, output_folder, data_folder):
     os.makedirs(output_folder, exist_ok=True)  # Ensure the output folder exists
+
+    tasks = []
+    semaphore = asyncio.Semaphore(10)  # Limit the number of concurrent tasks
 
     for file_name in os.listdir(input_folder):
         if not file_name.endswith(".xml"):  # Skip non-XML files
@@ -19,24 +33,13 @@ def convert_files(convert_function, input_folder, output_folder, data_folder):
         input_file_path = os.path.join(input_folder, file_name)
         output_file_path = os.path.join(output_folder, file_name[:-4] + ".json")
 
-        try:
-            # Call the specific parse function
-            # FIXME: This could be multithreaded and waaay faster. This will improve performance drastically when querying the GETTY endpoint.
-            parsed_data = convert_function(input_file_path, data_folder)
-            if parsed_data:
-                # Write the parsed data to a JSON file
-                with open(output_file_path, "w", encoding="utf-8") as output_file:
-                    output_file.write(parsed_data.to_json())
-            else:
-                print(f"Failed to parse {file_name}.")
-        except Exception as e:
-            # Print any errors that occur during processing
-            print(f"Error processing {file_name}: {e}")
+        task = process_file(convert_function, input_file_path, output_file_path, data_folder, semaphore)
+        tasks.append(task)
 
+    await asyncio.gather(*tasks)
     print(f"Conversion complete from {input_folder} to {output_folder}.")
 
-def main():
-    # Set up argument parsing
+async def main():
     parser = argparse.ArgumentParser(description="Convert XML files to JSON.")
     parser.add_argument(
         "--type",
@@ -55,22 +58,17 @@ def main():
         help="Path to the output folder for JSON files.",
     )
 
-    # TODO: Add a flag that specifies whether the program should query for more accurate info at the GETTY dataset.
-    #       The conversion is damn fucking slow because of the load of queries we make to the API endpoint.
-
     args = parser.parse_args()
 
-    # Define subfolder mappings for each type
     type_to_subfolder = {
         "archive": "Archiv",
         "registers": "Regesten",
         "names": "Namen",
     }
 
-    # Dispatch the appropriate function(s) based on the type
     if args.type in ["archive", "all"]:
         print("Converting Archive XML files...")
-        convert_files(
+        await convert_files_async(
             parseArchiveLinkXML,
             os.path.join(args.input_path, type_to_subfolder["archive"]),
             os.path.join(args.output_path, "Archiv_JSON"),
@@ -79,7 +77,7 @@ def main():
 
     if args.type in ["registers", "all"]:
         print("Converting Regesten (Document) XML files...")
-        convert_files(
+        await convert_files_async(
             parseDocumentXML,
             os.path.join(args.input_path, type_to_subfolder["registers"]),
             os.path.join(args.output_path, "Regesten_JSON"),
@@ -88,7 +86,7 @@ def main():
 
     if args.type in ["names", "all"]:
         print("Converting Names XML files...")
-        convert_files(
+        await convert_files_async(
             parse_person_xml,
             os.path.join(args.input_path, type_to_subfolder["names"]),
             os.path.join(args.output_path, "Namen_JSON"),
@@ -96,4 +94,4 @@ def main():
         )
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

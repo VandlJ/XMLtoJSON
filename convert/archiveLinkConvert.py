@@ -1,6 +1,5 @@
 import os
 import xml.etree.ElementTree as ET
-
 from model.ArchiveLink import ArchiveLink
 
 # Define XML namespaces
@@ -13,13 +12,13 @@ def file_exists(file_path):
     """Check if a file exists and is a valid file."""
     return os.path.exists(file_path) and os.path.isfile(file_path)
 
-def parse_xml(xml_file):
+async def parse_xml(xml_file):
     """Parse an XML file and return its root element."""
     tree = ET.parse(xml_file)
     root = tree.getroot()
     return root
 
-def convert_to_json(xml_root, processed_links, data_folder):
+async def convert_to_json(xml_root, processed_links, data_folder):
     """Convert an XML root element to JSON, handling sublinks."""
     link_to = xml_root.get("uri")
 
@@ -54,7 +53,7 @@ def convert_to_json(xml_root, processed_links, data_folder):
 
             xml_file = os.path.join(data_folder, f"{link}.xml")
             if file_exists(xml_file):
-                sublink_data = convert_to_json(parse_xml(xml_file), processed_links, data_folder)
+                sublink_data = await convert_to_json(await parse_xml(xml_file), processed_links, data_folder)
 
                 if sublink_data:
                     subs.append(sublink_data)
@@ -64,18 +63,18 @@ def convert_to_json(xml_root, processed_links, data_folder):
         json_data["name"], json_data["hasSublink"], json_data["linkTo"], subs
     )
 
-def set_next_links(archive_links):
+def set_next_links(archive_link):
     """Set the `next_link` attribute for sequential sublinks."""
-    for i in range(len(archive_links[0].sublinks) - 1):
-        archive_links[0].sublinks[i].next_link = archive_links[0].sublinks[i + 1].linkTo
-    return archive_links[0]
+    for i in range(len(archive_link.sublinks) - 1):
+        archive_link.sublinks[i].next_link = archive_link.sublinks[i + 1].linkTo
+        set_next_links(archive_link.sublinks[i])
+    if archive_link.sublinks:
+        set_next_links(archive_link.sublinks[-1])
 
-def parseArchiveLinkXML(in_file, data_folder):
+async def parseArchiveLinkXML(in_file, data_folder):
     """Parse a single XML file and convert it to a JSON-compatible object."""
-    archive_links = []
     processed_links = set()
-    root = parse_xml(in_file)
-    data = convert_to_json(root, processed_links, data_folder)
-    archive_links.append(data)
-
-    return set_next_links(archive_links)
+    root = await parse_xml(in_file)
+    archive_link = await convert_to_json(root, processed_links, data_folder)
+    set_next_links(archive_link)
+    return archive_link

@@ -135,7 +135,7 @@ This project was inherited from another team, and we made several significant im
      - `display`: This field is used for displaying text on the frontend, ensuring it retains the original formatting for readability.
      - `processable`: This field contains a cleaner version of the text, optimized for computer processing and analysis.
 
-2. **Metadata Handling: Problem with `.p` and Similar Metadata in Regesten**
+2. **Metadata Handling: Problem Metadata in Regesten**
    - There were inconsistencies in capturing metadata elements such as `.p` in the Regesten files. Some elements were missing or incorrectly captured. We conducted a thorough review and ensured that all metadata elements are now accurately captured and processed in our iteration of the program.
 
 3. **Enhanced Interactivity: Add Information `onmouseover="highlightWords(event, '...')"` in Regesten**
@@ -155,6 +155,7 @@ This project was inherited from another team, and we made several significant im
 
 4. **Name Processing: Splitting First Name and Last Name via External Tool - GettyULAN**
    - We integrated the project with an external tool, GettyULAN, to enhance name processing. This tool or API provides URL links to authors and returns one request per person. The application queries the SPARQL endpoint Getty, where each name is validated and processed. This integration ensures accurate and enriched author information.
+   - Additionally, we made the API for name splitting run asynchronously with caching, significantly increasing performance by reducing redundant requests and improving response times.
 
 5. **Unified Main Script for Conversion**
    - We streamlined the conversion process by consolidating the three main Python scripts (previously used for different document types) into a single, unified script. This main script is now configurable via terminal options, allowing users to specify `--type`, `--input_path`, and `--output_path`. This change simplifies the execution and enhances the flexibility of the conversion process.

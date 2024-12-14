@@ -11,6 +11,7 @@
   - [Setup Instructions](#setup-instructions)
     - [Step 1: Clone the Repository](#step-1-clone-the-repository)
     - [Step 2: Run the Conversion](#step-2-run-the-conversion)
+  - [Changes and Improvements](#changes-and-improvements)
 
 ---
 
@@ -124,3 +125,44 @@ python3 scripts/main_convert.py --help
 ```
 
 This command will start processing the XML files in the specified `--input_path` directory and output the results to the `--output_path` directory.
+
+## Changes and Improvements
+
+This project was inherited from another team, and we made several significant improvements and fixes to enhance its functionality and reliability:
+
+1. **Error Handling: Spaces/Blank Characters for Indentation in Text - in Regesten Files**
+   - Previously, the Regesten JSON files had issues with spaces and blank characters causing indentation errors. We addressed this by splitting the "text" field into two distinct key values:
+     - `display`: This field is used for displaying text on the frontend, ensuring it retains the original formatting for readability.
+     - `processable`: This field contains a cleaner version of the text, optimized for computer processing and analysis.
+
+2. **Metadata Handling: Problem with `.p` and Similar Metadata in Regesten Files**
+   - There were inconsistencies in capturing metadata elements such as `.p` in the Regesten files. Some elements were missing or incorrectly captured. We conducted a thorough review and ensured that all metadata elements are now accurately captured and processed in our iteration of the program.
+
+3. **Enhanced Interactivity: Add Information `onmouseover="highlightWords(event, '...')"` in Regesten File**
+   - To improve the user experience, we added interactivity to the Regesten files. The `onmouseover` attribute was added to highlight words when hovered over. The processed data now includes:
+     ```json
+     "names": [
+       {
+         "Aichholz_Johann": "Johann Aichholz",
+         "alias": "Johann Aichholz Ehrzney doctor"
+       },
+       {
+         "Strauben_Franz": "Franz Strauben",
+         "alias": "Frannzen Strauben"
+       }
+     ]
+     ```
+
+4. **Name Processing: Splitting First Name and Last Name via External Tool - GettyULAN**
+   - We integrated the project with an external tool, GettyULAN, to enhance name processing. This tool or API provides URL links to authors and returns one request per person. The application queries the SPARQL endpoint Getty, where each name is validated and processed. This integration ensures accurate and enriched author information.
+
+5. **Unified Main Script for Conversion**
+   - We streamlined the conversion process by consolidating the three main Python scripts (previously used for different document types) into a single, unified script. This main script is now configurable via terminal options, allowing users to specify `--type`, `--input_path`, and `--output_path`. This change simplifies the execution and enhances the flexibility of the conversion process.
+
+6. **Improved Documentation and Setup Instructions**
+   - Updated the documentation to reflect the new changes and provide clear setup instructions. This includes detailed usage examples and the expected input data folder structure to ensure users can easily get started with the project.
+
+7. **Performance Enhancements and Bug Fixes**
+   - Conducted a comprehensive review of the codebase to identify and fix bugs. Implemented performance enhancements to ensure the conversion process is efficient and reliable.
+
+These improvements have significantly enhanced the functionality, usability, and reliability of the XML to JSON Converter project, making it more robust and user-friendly.

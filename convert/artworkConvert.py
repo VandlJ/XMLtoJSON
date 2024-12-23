@@ -8,10 +8,9 @@ async def getNames(element):
 
     for node in element.childNodes:
         if node.nodeName == "a":
-            tmp = {}
-            name = node.firstChild.data.strip()  # Get the display name
             name_key_string = node.getAttribute("href")
             name_key = name_key_string.split("/")[-1].rsplit(".xml", 1)[0]
+            display_name = node.firstChild.data.strip()  # Get the display name
 
             # Extract alias from the onmouseover attribute
             onmouseover = node.getAttribute("onmouseover")
@@ -19,10 +18,12 @@ async def getNames(element):
             alias = alias_match.group(1) if alias_match else None
 
             # Populate the dictionary
-            tmp[name_key] = name
-            if alias:
-                tmp["alias"] = alias
-            names.append(tmp)
+            name_entry = {
+                "name_key": name_key,
+                "display_name": display_name,
+                "alias": alias
+            }
+            names.append(name_entry)
 
     return names
 
